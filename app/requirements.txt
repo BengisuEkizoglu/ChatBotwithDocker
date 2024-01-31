@@ -1,0 +1,12 @@
+Flask
+pandas
+langchain
+pypdf
+sentence_transformers
+chromadb
+accelerate
+bitsandbytes
+transformers
+torch
+gradio
+huggingface_hub
