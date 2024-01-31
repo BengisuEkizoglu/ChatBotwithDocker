@@ -88,8 +88,19 @@ class ChromaDB:
         embedding_func = embedding_functions.SentenceTransformerEmbeddingFunction(model_name=embed_model)
         self.collection = self.client.get_or_create_collection(name=collection_name, embedding_function=embedding_func, metadata={"hnsw:space": "cosine"})
 
+    def check_document_exists(self, document_id):
+        try:
+            result = self.collection.get(document_id)
+            return result is not None
+        except Exception as e:
+            print(f"An error occurred while checking document: {e}")
+            return False
+
     def add_documents(self, documents, ids):
-        self.collection.add(documents=documents, ids=ids)
+        if not self.check_document_exists(ids):
+            self.collection.add(documents=documents, ids=ids)
+        else:
+            print(f"Document with ID {ids} already exists.")
 
     def query(self, query_text, n_results=5):
         return self.collection.query(query_texts=[query_text], n_results=n_results)
